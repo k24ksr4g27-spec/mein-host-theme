@@ -3,6 +3,9 @@
   "description": "Fumio Ghost Theme",
   "demo": "https://fumio.brightthemes.com",
   "version": "1.11.0",
+  "engines": {
+  "ghost": ">=5.0.0"
+},
   "author": {
     "name": "Bright Themes",
     "email": "brightthemes@gmail.com",
