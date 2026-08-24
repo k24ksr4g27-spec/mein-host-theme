@@ -1,0 +1,27 @@
+<a href="{{url}}" title="{{name}}" aria-label="{{name}}" class="tag-card {{#if accent_color}}has-color{{/if}}" 
+  {{#if accent_color}} style="--color-accent: {{accent_color}}"{{/if}}>
+  {{!-- Tag image --}}
+  {{#if feature_image}}
+    {{#if show_img}}
+      <figure class="tag-card__media">
+        <img class="lazyload tag-card__img"
+          data-srcset="{{img_url feature_image size="xs"}} 100w,
+                  {{img_url feature_image size="s"}} 300w"
+          srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+          data-sizes="auto"
+          data-src="{{img_url feature_image size="xs"}}"
+          src="{{img_url feature_image size="xxs"}}"
+          alt="{{name}}"
+        />
+      </figure>  
+      <span class="flex-1"></span>
+    {{/if}}
+  {{/if}}
+
+  {{!-- Tag content --}}
+  <div class="tag-card__content flex flex-cc fw-600">
+    {{!-- Title and count --}}
+    <h3 class="tag-card__name flex-1">{{name}}</h3>
+    <span class="tag-card__count">{{count.posts}}+</span>
+  </div>
+</a>
