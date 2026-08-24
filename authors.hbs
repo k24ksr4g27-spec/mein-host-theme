@@ -1,0 +1,25 @@
+{{!< default}}
+
+{{!-- Page Hero --}}
+{{#page}}
+  {{> post-hero    
+    image_style="hidden"
+  }}
+{{else}}
+  <div class="hero__content flex flex-col flex-cc m-t-lg m-b-lg">
+    <h1 class="hero__title text-center">{{t "Authors"}}</h1>
+  </div>
+{{/page}}
+
+<div class="container wrapper">
+  {{!-- List of author cards --}}
+  {{#get "authors" limit="100" include="count.posts" order="count.posts desc"}}
+    <div class="grid auto grid-authors m-b-lg">
+      {{#foreach authors}}
+        {{#if count.posts}}
+          {{> author-card show_img=true}}
+        {{/if}}
+      {{/foreach}}
+    </div>
+  {{/get}}
+</div>

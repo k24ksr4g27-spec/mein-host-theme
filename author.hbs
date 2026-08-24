@@ -1,0 +1,116 @@
+{{!< default}}
+
+<div class="container wrapper">
+  {{!-- Author Hero --}}
+  {{#author}}
+    <div class="author-header flex items-center">
+      {{#if profile_image}}
+        <figure class="author-header__media">
+          <img class="lazyload is-round" 
+            data-srcset="{{img_url profile_image size="xs"}} 100w,
+                {{img_url profile_image size="s"}} 300w"
+            srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+            data-sizes="auto"
+            data-src="{{img_url profile_image size="s"}}"
+            src="{{img_url profile_image size="xxs"}}"
+            alt="{{name}}"/>
+        </figure>
+      {{/if}}
+      <div class="author-header__content flex-1">
+        <h1 class="author-header__title m-b-xs">{{name}}</h1>
+
+        {{#if bio}}<div class="author-header__descr text-acc m-b">{{bio}}</div>{{/if}}
+
+        <div class="author-header__details flex items-center">
+          {{!-- Number of posts --}}
+          <span class="text-09 fw-600">{{#plural ../pagination.total empty=(t 'No posts') singular=(t '1 post') plural=(t '% posts')}}{{/plural}}</span>
+        
+          {{!-- Author social links --}}
+          <div class="author-card__social flex{{#if twitter}} has-twitter{{/if}}{{#if facebook}} has-facebook{{/if}}{{#if website}} has-website{{/if}}">
+            {{!-- Twitter --}}
+            {{#if twitter}}
+              <a href="{{social_url type="twitter"}}" target="_blank" title="Twitter" aria-label="Twitter">
+                {{> icon name="twitter-x" size="sm"}}
+              </a>
+            {{/if}}
+            {{!-- Facebook --}}
+            {{#if facebook}}
+              <a href="{{social_url type="facebook"}}" target="_blank" title="Facebook" aria-label="Facebook">
+                {{> icon name="facebook" size="sm"}}
+              </a>
+            {{/if}}
+            {{#if linkedin}}
+              <a href="{{social_url type="linkedin"}}" target="_blank" title="LinkedIn" aria-label="LinkedIn">
+                {{> icon name="linkedin" size="sm"}}
+              </a>
+            {{/if}}
+            {{#if bluesky}}
+              <a href="{{social_url type="bluesky"}}" target="_blank" title="Bluesky" aria-label="Bluesky">
+                {{> icon-p name="bluesky" size="sm"}}
+              </a>
+            {{/if}}
+            {{#if threads}}
+              <a href="{{social_url type="threads"}}" target="_blank" title="Threads" aria-label="Threads">
+                {{> icon-p name="threads" size="sm"}}
+              </a>
+            {{/if}}
+            {{#if mastodon}}
+              <a href="{{social_url type="mastodon"}}" target="_blank" title="Mastodon" aria-label="Mastodon">
+                {{> icon-p name="mastodon" size="sm"}}
+              </a>
+            {{/if}}
+            {{#if tiktok}}
+              <a href="{{social_url type="tiktok"}}" target="_blank" title="TikTok" aria-label="TikTok">
+                {{> icon-p name="tiktok" size="sm"}}
+              </a>
+            {{/if}}
+            {{#if youtube}}
+              <a href="{{social_url type="youtube"}}" target="_blank" title="YouTube" aria-label="YouTube">
+                {{> icon-p name="youtube" size="sm"}}
+              </a>
+            {{/if}}
+            {{#if instagram}}
+              <a href="{{social_url type="instagram"}}" target="_blank" title="Instagram" aria-label="Instagram">
+                {{> icon name="instagram" size="sm"}}
+              </a>
+            {{/if}}
+            {{!-- Author website --}}
+            {{#if website}}
+              <a href="{{website}}" class=""
+                title="Website" aria-label="Website"
+                target="_blank" rel="noopener noreferrer">
+                {{> icon name="link" size="sm"}}
+              </a>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/author}}
+
+
+  {{#if posts}}
+    {{!-- Posts --}}
+    <div class="grid post-feed auto js-post-feed">
+      {{#foreach posts}}
+        {{> post-card 
+          show_img=true 
+          show_access=true
+          show_excerpt=true
+        }}
+      {{/foreach}}
+    </div>
+
+    {{!-- Pagination --}}
+    <div class="flex flex-cc m-t-xl m-b-lg">
+      {{pagination}}
+    </div>
+
+    {{!-- Load more button --}}
+    {{!-- <div class="col-xs-12 center-xs m-t-lg m-b-lg">
+      <button class="btn btn--wide btn--shadow btn--filled js-load-more">
+        {{t "Load more posts"}}
+      </button>
+    </div> --}}
+  {{/if}}
+</div>

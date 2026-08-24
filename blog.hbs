@@ -1,0 +1,37 @@
+{{!< default}}
+
+{{!-- Page Hero --}}
+{{#page}}
+  {{> post-hero 
+    image_style="hidden"
+  }}
+{{else}}
+  <div class="hero__content flex flex-col flex-cc m-t-lg m-b-lg">
+    <h1 class="hero__title text-center">{{t "Blog"}}</h1>
+  </div>
+{{/page}}
+
+{{#if posts}}
+  <div class="container wrapper">
+    {{!-- Blog posts --}}
+    <div class="grid post-feed auto m-b-lg">
+      {{#foreach posts}}
+        {{> post-card
+          show_img=true
+        }}
+      {{/foreach}}
+    </div>
+
+    {{!-- Pagination --}}
+    <div class="flex flex-cc m-t-xl m-b-lg">
+      {{pagination}}
+    </div>
+
+    {{!-- Load more button --}}
+    {{!-- <div class="col-xs-12 center-xs m-t-lg m-b-lg">
+      <button class="btn btn--wide btn--shadow btn--filled js-load-more">
+        {{t "Load more posts"}}
+      </button>
+    </div> --}}
+  </div>
+{{/if}}

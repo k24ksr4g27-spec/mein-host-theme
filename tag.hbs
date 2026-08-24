@@ -1,0 +1,58 @@
+{{!< default}}
+
+<div class="container wrapper">
+  {{!-- Tag Hero --}}
+  {{#tag}}
+    <div class="tag-header flex items-center{{#unless feature_image}} text-center{{/unless}}" 
+      {{#if accent_color}} style="--color-accent: {{accent_color}}"{{/if}}>
+
+      {{#if feature_image}}
+        <img class="lazyload tag-header__media flex" 
+            data-srcset="{{img_url feature_image size="xs"}} 100w,
+                    {{img_url feature_image size="s"}} 300w,
+                    {{img_url feature_image size="m"}} 600w,
+                    {{img_url feature_image size="l"}} 1000w"
+            srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+            data-sizes="auto"
+            data-src="{{img_url feature_image size="m"}}"
+            src="{{img_url feature_image size="xxs"}}"
+            alt="{{name}}"/>
+      {{/if}}
+
+      <div class="tag-header__content flex-1">
+        <h1 class="tag-header__name m-b-xs">{{name}}</h1>
+        {{#if description}}
+          <div class="tag-header__description text-11 text-acc m-b">{{description}}</div>
+        {{/if}}
+        <div class="tag-header__count text-09 fw-600 text-acc">
+          {{#plural ../pagination.total empty=(t 'No posts') singular=(t '1 post') plural=(t '% posts')}}{{/plural}}
+        </div>
+      </div>
+      
+    </div>
+  {{/tag}}
+
+  {{!-- The main content --}}
+  {{#if posts}}
+    {{!-- Posts --}}
+    <div class="grid post-feed js-post-feed auto">
+      {{#foreach posts}}
+        {{> post-card
+          show_img=true
+        }}
+      {{/foreach}}
+    </div>
+
+    {{!-- Pagination --}}
+    <div class="flex flex-cc m-t-xl m-b-lg">
+      {{pagination}}
+    </div>
+
+    {{!-- Load more button --}}
+    {{!-- <div class="col-xs-12 center-xs m-t-lg m-b-lg">
+      <button class="btn btn--wide btn--shadow btn--filled js-load-more">
+        {{t "Load more posts"}}
+      </button>
+    </div> --}}
+  {{/if}}
+</div>

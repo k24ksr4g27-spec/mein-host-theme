@@ -1,0 +1,201 @@
+{{!< default}}
+
+<div class="container wrapper">
+
+  <div class="js-search search m-b-lg">
+    <div class="hero__content flex flex-col flex-cc m-t-lg m-b-lg">
+      {{!-- <h1 class="hero__title text-center">{{t "Search"}}</h1> --}}
+      <h1 class="js-search-header search__header hero__title m-b">
+        <span class="js-search-result-count"></span> 
+        <span class="js-search-result-text">{{t "results found"}}</span>
+      </h1>
+
+      <form action="/search/" method="get" class="flex flex-1 radius-rounded js-search-form">
+        <input class="js-search-query search-query color-primary" aria-label="{{t "Search"}}"
+          title="{{t "Search"}}" placeholder="{{t "Search"}}" autocomplete="off" 
+          minlength="1" required/>
+        <button class="search__icon">
+          {{>icon name="search" size="lg"}}
+        </button>
+      </form>
+
+      <span class="search-helper">{{t "Press 'Enter' to search"}}</span>
+
+      <div class="js-search-no-results search__no-results m-t-xl m-b-xl text-center text-acc text-11">
+        {{> icon name="warning"}}
+        <span>{{t "Sorry, but nothing matched your search terms. Please try again with some different keywords."}}</span>
+      </div>
+    </div>
+
+    <div class="js-search-result-list grid grid-search"></div>
+    
+    </div>
+
+    {{!-- Recent posts --}}
+    {{#get "posts" include="tags,authors" limit="3"}}
+      {{#if posts}}
+        <div class="section m-b js-recent-posts is-hidden">
+          <span class="section__title is-block m-b-sm">{{t "Recent posts"}}</span>
+
+          <div class="grid post-feed auto m-b-xl">
+            {{#foreach posts}}
+              {{> post-card }}
+            {{/foreach}}
+          </div>
+        </div>
+      {{/if}}
+    {{/get}}
+
+
+    <template class="js-search-result-template">
+      <article class="search-result__post">
+        <a href="" class="search-result__media js-result-media js-result-link">
+          <img class="lazyload js-result-img" data-src="" alt=""/>
+        </a>
+        <div class="search-result__content">
+          <h2 class="search-result__title text-acc m-b-0"><a href="" class="js-result-title js-result-link"></a></h2>
+          <div class="search-result__footer flex text-acc m-t-sm">
+            <a href="" class="js-result-tag-link"><span class="search-result__tag fw-500 js-result-tag"></span></a>
+            <span class="search-result__date js-result-date"></span>
+          </div>
+          <div class="search-result__excerpt js-result-excerpt text-acc m-t is-hidden"></div>
+        </div>
+      </article>
+    </template>
+  </div>
+  
+</div>
+
+{{!-- Search Library & Start Search --}}
+{{#contentFor "search"}}
+  <script src="{{asset 'js/fuse.min.js'}}"></script>
+  <script>
+    /**
+    * Perform Search
+    */
+    const performSearch = () => {
+      const getPosts = async function(filter, callback) {
+        const api = new GhostContentAPI({
+          url: themeSettings.searchUrl,
+          key: document.querySelector('[data-ghost][data-key]').getAttribute('data-key'),
+          version: themeSettings.ghostVersion
+        });
+
+        const fields = themeSettings.searchInContent ? `url,slug,title,published_at,feature_image,custom_excerpt,visibility,plaintext`
+                                                        : `url,slug,title,published_at,feature_image,custom_excerpt,visibility`
+
+        const formats = themeSettings.searchInContent ? ['html,plaintext'] : ''
+
+        // fetch posts, including related tags and authors
+        try {
+          const res = await api.posts
+          .browse({
+            limit: 100, 
+            include: 'tags',
+            fields: fields,
+            filter: filter,
+            formats: formats
+          });
+          return res;
+        } catch (err) {
+          console.log(err);
+        }
+      }
+
+      getPosts().then(function(posts) {
+        const keys = themeSettings.searchInContent ? [{name: 'title'}, {name: 'tags.name'}, {name: 'custom_excerpt'}, {name: 'plaintext'}]
+                                                    : [{name: 'title'}, {name: 'tags.name'}, {name: 'custom_excerpt'}];
+
+        /* Custom settings for search function */
+        const options = {
+          // includeMatches: true,
+          shouldSort: true,
+          tokenize: true,
+          matchAllTokens: true,
+          threshold: 0,
+          location: 0,
+          distance: 100,
+          maxPatternLength: 32,
+          minMatchCharLength: 1,
+          ignoreLocation: true,
+          keys: keys
+        }
+
+        const fuseSearch = new Fuse(posts, options);
+        const query = decodeURI(window.location.search.substr(3));
+        const result = query ? fuseSearch.search(query) : '';
+
+        if (result.length === 0) {
+          document.querySelector('.js-search-result-text').innerText = "{{t "Nothing found"}}";
+          document.querySelector('.js-search-no-results').classList.add('is-active');
+          document.querySelector('.js-recent-posts').classList.remove('is-hidden');
+        } else {
+          if (result.length === 1) {
+            document.querySelector('.js-search-result-text').innerText = "{{t "result found"}}";
+          }
+          document.querySelector('.js-search-result-count').innerHTML = result.length;
+        }
+
+        document.querySelector('.js-search form').classList.add('is-active');
+        document.querySelector('.js-search-query').value = `${query}`;
+        document.querySelector('.js-search-query').focus();
+        document.querySelector('.js-search-header').classList.add('is-active');
+
+        if (result.length === 0) return;
+
+        const searchResultTemplate = document.querySelector('.js-search-result-template');
+        const searchResultList = document.querySelector('.js-search-result-list');
+
+        result.map(function(post) { 
+          // article
+          var resultItem = searchResultTemplate.content.cloneNode(true).querySelector('article');
+
+          // links
+          var postLinks = resultItem.querySelectorAll('.js-result-link');
+          postLinks.forEach(link => {
+            link.setAttribute('href', post.item.url);
+          })
+
+          // post image
+          if (post.item.feature_image) {
+            resultItem.classList.add('has-img');
+            resultItem.querySelector('.js-result-img').setAttribute('data-src', post.item.feature_image);
+            if(post.item.feature_image.includes('/content/images/')) 
+              post.item.feature_image = post.item.feature_image.replace('/content/images/','/content/images/size/w600/'); 
+          } else {
+            // excerpt
+            if (post.item.custom_excerpt) {
+              resultItem.querySelector('.js-result-excerpt').textContent = post.item.custom_excerpt;
+              resultItem.querySelector('.js-result-excerpt').classList.remove('is-hidden');
+            }
+          }
+
+          //  title
+          resultItem.querySelector('.js-result-title').textContent = post.item.title;
+
+          // tag
+          if (post.item.primary_tag) {
+            resultItem.querySelector('.js-result-tag').textContent = post.item.primary_tag.name;
+            resultItem.querySelector('.js-result-tag').style = `--accent-color: ${post.item.primary_tag.accent_color}`;
+          } else {
+            resultItem.querySelector('.js-result-tag').classList.add('is-hidden');
+          }
+
+          // date
+          const date = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(post.item.published_at));
+          resultItem.querySelector('.js-result-date').textContent = date;
+
+          // add to page
+          searchResultList.appendChild(resultItem);
+        }).join(' ')
+      });
+    };
+
+
+    document.addEventListener('readystatechange', event => {
+      if (event.target.readyState === 'complete') {
+        performSearch();
+      }
+    });
+  </script>
+{{/contentFor}}
