@@ -1,0 +1,16 @@
+{{!-- Related Posts --}}
+{{#if primary_tag}}
+  {{#get "posts" include="tags,authors" limit="3" filter="id:-{{comment_id}}+tag:{{primary_tag.slug}}" as |related|}}
+    {{#if posts}}
+      <div class="section__title m-t-lg">{{t "More from"}} {{@site.title}}</div>
+
+      <div class="grid post-feed auto related-posts m-b-lg">
+        {{#foreach posts}}
+          {{> post-card
+            show_img=true
+          }}
+        {{/foreach}}
+      </div>
+    {{/if}}
+  {{/get}}
+{{/if}}

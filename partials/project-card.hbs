@@ -1,0 +1,43 @@
+{{!-- Project card --}}
+<article class="project-card{{#unless feature_image}} no-image{{/unless}}{{#if featured}} is-featured{{/if}}{{#if class}} {{class}}{{/if}} js-project-card"
+  {{#foreach tags visibility="public" limit="1"}}{{#if accent_color}} style="--color-accent: {{accent_color}}"{{/if}}{{/foreach}}> 
+
+  {{!-- Feature Image --}}
+  {{#if feature_image}}
+    {{#link href=(url) class="project-card__media"}}
+      <img class="lazyload project-card__img"
+        data-srcset="{{img_url feature_image size="s"}} 300w,
+                {{img_url feature_image size="m"}} 540w,
+                {{img_url feature_image size="l"}} 1000w"
+        srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+        data-sizes="auto"
+        data-src="{{img_url feature_image size="l"}}"
+        src="{{img_url feature_image size="xxs"}}"
+        alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+      />
+    {{/link}}
+  {{/if}}
+  
+  {{!-- Project card content --}}
+  <div class="project-card__content">
+
+    {{!-- Project card Title --}}
+    <h3 class="project-card__title">
+      {{#link href=(url) aria-label=(title)}}{{title}}{{/link}}
+    </h3>
+
+    {{!-- Project card excerpt --}}
+    {{#if excerpt}} 
+      <div class="project-card__excerpt text-acc m-b">
+        {{excerpt words="30"}}
+      </div>
+    {{/if}}
+
+    {{!-- Read more link --}}
+    {{#link href=(url) aria-label=(title) class="project-card__read-more flex-inline items-center"}}
+      <span class="m-r-sm">{{t "Read more"}}</span>
+      {{> icon size="sm" name="arrow-right"}}
+    {{/link}}
+  </div>
+
+</article>

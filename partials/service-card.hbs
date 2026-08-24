@@ -1,0 +1,24 @@
+<li class="service-card {{#if accent_color}}has-color{{/if}}" 
+  {{#if accent_color}} style="--color-accent: {{accent_color}}"{{/if}}>
+  {{!-- Tag image --}}
+  {{#if feature_image}}
+    <figure class="service-card__media">
+      <img class="lazyload service-card__img"
+        data-srcset="{{img_url feature_image size="xs"}} 100w,
+                {{img_url feature_image size="s"}} 300w"
+        srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+        data-sizes="auto"
+        data-src="{{img_url feature_image size="xs"}}"
+        src="{{img_url feature_image size="xxs"}}"
+        alt="{{name}}"
+      />
+    </figure>  
+  {{/if}}
+
+  {{!-- Tag content --}}
+  <div class="service-card__content flex flex-col">
+    {{!-- Title and count --}}
+    <h3 class="service-card__name flex-1">{{name}}</h3>
+    <p class="service-card__description">{{description}}</p>
+  </div>
+</li>
