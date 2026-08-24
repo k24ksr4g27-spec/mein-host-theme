@@ -1,0 +1,17 @@
+{{!-- Post author card --}}
+{{^has tag="#project"}}
+  <div class="content-width m-b-lg">
+    <div class="section__title section__title--small">{{t "Written by"}}</div>
+    {{#has author="count:>1"}}
+      <div class="grid authors m-t-lg">
+        {{#foreach authors}}
+          {{> author-card}}
+        {{/foreach}}
+      </div>
+    {{else}}
+      {{#primary_author}}
+        {{> author-card class="wide"}}
+      {{/primary_author}}
+    {{/has}}
+  </div>
+{{/has}}

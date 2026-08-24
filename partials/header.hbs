@@ -1,0 +1,82 @@
+{{!-- Site header --}}
+<header class="header js-header" {{#if @custom.header_position}}data-header="{{@custom.header_position}}"{{/if}}>
+  <div class="container wrapper">
+    <div class="row">
+      <div class="col-xs col-md-3 col-lg-2 flex">
+        {{!-- Site logo or title --}}
+        {{#link href=@site.url class="header__brand"}}
+          {{#if @site.logo}}
+            {{!-- Site logo --}}
+            <img class="header__logo"
+              src="{{img_url @site.logo size="s"}}"
+              alt="{{@site.title}}"/>
+          {{else}}
+            {{!-- Site Title --}}
+            <span class="header__title m-0 p-0">{{@site.title}}</span>
+          {{/if}}
+        {{/link}}
+      </div>
+
+      <div class="col-xs col-md-9 col-lg-10 is-rel flex items-center content-end">
+        {{!-- Menu --}}
+        <nav class="header__menu items-center">
+          {{!-- Main navigation --}}
+          {{navigation}}
+        </nav>
+
+        {{#if @site.members_enabled}}
+          {{#unless @site.members_invite_only}}
+            {{!-- Separator --}}
+            <span class="fw-600 m-l m-r text-acc">/</span>
+
+            {{!-- Sign up Button --}}
+            {{#if @member.paid}}
+            {{else if @member}}
+              {{!-- nothing --}}
+            {{else}}
+              {{#link href="/signup/" class="signup-link btn--primary radius-rounded"}}{{t "Subscribe"}}{{/link}}
+              {{!-- Portal link below --}}
+              {{!-- {{#link href="/signup/" data-portal="signup" class="signup-link btn--primary radius-rounded"}}{{t "Subscribe"}}{{/link}} --}}
+            {{/if}}
+          {{else}}
+            {{!-- Separator --}}
+            <span class="fw-600 m-l m-r text-acc">/</span>
+
+            {{!-- Sign up Button --}}
+            {{#if @member.paid}}
+            {{else if @member}}
+              {{!-- nothing --}}
+            {{else}}
+              {{#link href="/signin/" class="signup-link btn--primary radius-rounded"}}{{t "Sign in"}}{{/link}}
+              {{!-- Portal link below --}}
+              {{!-- {{#link href="/signin/" data-portal="signin" class="signin-link btn--primary radius-rounded"}}{{t "Sign in"}}{{/link}} --}}
+            {{/if}}
+          {{/unless}}
+
+          {{!-- Member--}}
+          {{#if member}}
+            <button class="header__user--toggle flex-cc js-member-btn{{#if @member}} is-member{{else}} is-not-member{{/if}}" 
+                title="{{#if @member}}{{customer.name}}{{else}}{{t "Menu"}}{{/if}}" 
+                aria-label="{{#if @member}}{{customer.name}}{{else}}{{t "Menu"}}{{/if}}">
+              {{#if @member}}
+                <img class="header__user-avatar" 
+                  src="{{@member.avatar_image}}"
+                  alt="{{@member.name}}"/>
+              {{/if}}
+              {{>icon name="user" size="md"}}
+            </button>
+          {{/if}}
+
+          {{> member-menu}}
+        {{/if}}
+
+        {{!-- Menu Button --}}
+        <button class="btn-menu-toggle menu__toggle js-menu-open"
+          type="button" title="{{t "Menu"}}" aria-label="{{t "Menu"}}">
+            <span></span>
+            <span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>

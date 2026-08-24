@@ -1,0 +1,10 @@
+{{#get "pages" filter="tags:hash-secondary-cta" limit="1" as |cta|}}
+  {{#foreach cta}}
+    <section class="container wrapper section section-cta m-b-0{{#is "home"}} is-home{{/is}}{{#is "post"}} is-post{{/is}}">
+      <div class="secondary-cta">
+        <h2>{{custom_excerpt}}</h2>
+        {{#link href=(url) class="btn btn--lg btn--rounded flex-1 fw-600"}}{{title}}{{/link}}
+      </div>
+    </section>
+  {{/foreach}}
+{{/get}}

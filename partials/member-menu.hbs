@@ -1,0 +1,50 @@
+<div class="member-menu js-member-menu">
+  {{!-- Member Links --}}
+  {{#if @member}}
+    <div class="member-user">
+      <div class="member-info flex flex-col">
+        <div class="member-name">{{@member.name}}</div>
+        <span class="member-email">{{@member.email}}</span>
+      </div>
+    </div>
+    
+    {{!-- Upgrade link --}}
+    {{#unless @member.paid}}
+      {{#link href="/membership/" class="upgrade-link"}}
+        {{>icon name="trending-up" size="sm"}}{{t "Upgrade"}}
+      {{/link}}
+    {{/unless}}
+
+    {{!-- Account link --}}
+    {{#link href="/account/" class="account-link"}}
+      {{>icon name="user" size="sm"}}{{t "Account"}}
+    {{/link}}
+    {{!-- Portal link below --}}
+    {{!-- {{#link href="/account/" data-portal="account" class="account-link"}}
+      {{>icon name="user" size="sm"}}{{t "Account"}}
+    {{/link}} --}}
+
+    {{!-- Sign out link --}}
+    {{#link href="javascript:" data-members-signout="" class="signout-link"}}
+      {{>icon name="logout" size="sm"}}{{t "Sign out"}}
+    {{/link}}
+  {{else}}
+    {{!-- Sign up link --}}
+    {{#link class="signup-link" href="/signup/"}}
+      {{>icon name="arrow-up-right" size="sm"}}{{t "Sign up"}}
+    {{/link}}
+    {{!-- Portal link below --}}
+    {{!-- {{#link class="signup-link" href="/signup/" data-portal="signup"}}
+      {{>icon name="arrow-up-right" size="sm"}}{{t "Sign up"}}
+    {{/link}} --}}
+
+    {{!-- Sign in link --}}
+    {{#link class="signin-link" href="/signin/"}}
+      {{>icon name="login" size="sm"}}{{t "Sign in"}}
+    {{/link}}
+    {{!-- Portal link below --}}
+    {{!-- {{#link class="signin-link" href="/signin/" data-portal="signin"}}
+      {{>icon name="login" size="sm"}}{{t "Sign in"}}
+    {{/link}} --}}
+  {{/if}}
+</div>

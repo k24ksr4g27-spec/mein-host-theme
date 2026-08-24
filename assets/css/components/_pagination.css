@@ -1,0 +1,38 @@
+.pagination {
+  display: flex;
+  align-self: center;
+  padding: var(--gap-sm) var(--gap);
+  background-color: var(--color-bg-acc);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--global-radius-rounded);
+  font-weight: var(--font-weight-medium);
+  font-size: 0.9rem;
+  
+  @media (--mq-md) {
+    padding: 0.75em 1.5em;
+    font-size: 1rem;
+  }
+
+
+  .prev-posts, .next-posts { 
+    display: flex; 
+    align-items: center;
+
+    &.disabled { opacity: 0.6; }
+
+    @mixin attention {
+      color: var(--color-primary);
+
+      &.disabled { color: inherit; }
+    }
+  }
+
+  .page-number { 
+    margin: 0 1.5em; 
+    color: var(--color-text-acc);
+
+    @media (--mq-md) {
+      margin: 0 2em;
+    }
+  }
+}

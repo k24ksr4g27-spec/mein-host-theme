@@ -1,0 +1,33 @@
+<li class="testimonial-card"{{#if accent_color}} style="--color-bg: {{accent_color}}"{{/if}}>
+  {{!-- Tag description as quote --}}
+  <blockquote class="testimonial-card__quote">{{description}}</blockquote>
+
+  {{!-- Testimonial author --}}
+  <div class="testimonial-card__author">
+    {{!-- Tag image as author profile img --}}
+    {{#if feature_image}}
+      <figure class="testimonial-card__author-profile">
+        <img class="lazyload"
+          data-srcset="{{img_url feature_image size="xxs"}} 30w,
+                  {{img_url feature_image size="xs"}} 100w"
+          srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+          data-sizes="auto"
+          data-src="{{img_url feature_image size="xs"}}"
+          src="{{img_url feature_image size="xxs"}}"
+          alt="{{meta_name}}"
+        />
+      </figure>  
+    {{/if}}
+
+    <div class="testimonial-card__author-details">
+      {{!-- Tag meta title author name --}}
+      {{#if meta_title}}
+        <p class="testimonial-card__author-name">{{meta_title}}</p>
+      {{/if}}
+      {{!-- Tag meta description as author role/bio --}}
+      {{#if meta_description}}
+        <p class="testimonial-card__author-description">{{meta_description}}</p>
+      {{/if}}
+    </div>
+  </div>
+</li>

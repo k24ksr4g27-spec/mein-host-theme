@@ -1,0 +1,28 @@
+/* Mixins */
+@define-mixin outline {
+  &:focus-visible {
+    outline-color: hsla(var(--color-focus-hsl) / 75%);
+    outline-offset: -0.5px;
+    outline-style: solid;
+    outline-width: 2.5px;
+    @mixin-content;
+  }
+}
+
+@define-mixin attention {
+  &:hover,
+  &:active,
+  &:focus {
+    @mixin-content;
+  }
+
+  @mixin outline;
+}
+
+@define-mixin hide-scrollbar {
+  -ms-overflow-style: none; /* Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+}

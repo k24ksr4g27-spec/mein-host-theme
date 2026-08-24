@@ -1,0 +1,78 @@
+{{!-- Blog menu --}}
+<div class="menu js-menu">
+  <div class="menu__header flex content-end {{#match @custom.search_type "custom"}}m-b-lg{{/match}}">
+    {{!-- Search --}}
+    {{#match @custom.search_type "custom"}}
+      <form action="/search/" method="get" class="menu-search__form flex flex-1 radius-rounded js-search-form">
+        <input type="text" class="menu-search__input js-search-input" placeholder="{{t "Search"}}" autocomplete="off" 
+          title="{{t "Search"}}"  aria-label="{{t "Search"}}" aria-labelledby="search-input-label"
+          minlength="1" required/>
+        <button class="search__icon" type="submit" title="{{t "Search"}}" aria-label="{{t "Search"}}">
+          {{>icon name="search" size="md"}}
+        </button>
+      </form>
+
+      <span class="menu-search__helper" id="search-input-label">{{t "Press 'Enter' to search"}}</span>
+    {{/match}}
+
+    {{#match @custom.search_type "native"}}
+      <button class="search__toggle" title="{{t "Search"}}" aria-label="{{t "Search"}}" data-ghost-search>
+        {{>icon name="search" size="md"}}
+      </button>
+    {{/match}}
+
+    {{!-- Menu Button --}}
+    <button class="btn-menu-toggle menu__toggle is-active js-menu-close"
+      type="button" title="{{t "Menu"}}" aria-label="{{t "Menu"}}">
+        <span></span>
+        <span></span>
+    </button>
+  </div>
+
+  {{!-- Navigation --}}
+  <nav class="menu__navigation">
+    {{navigation}}
+
+    {{#if @site.secondary_navigation}}
+      {{navigation type="secondary"}}
+    {{/if}}
+  </nav>
+
+  {{!-- Spacing --}}
+  <span class="flex-1"></span>
+
+  {{!-- Subscribe --}}
+  {{#if @site.members_enabled}}
+    {{#unless @site.members_invite_only}}
+      {{#unless @member}}
+        <div class="menu__subscribe m-b">
+          {{!-- Subscribe --}}
+          <div class="bg-gradient radius flex flex-col p-lg color-white">
+            <div class="menu_subscribe-content z-index-1">
+              <span class="fw-700 text-16 m-b-xs is-block">{{t "Sign up to {sitetitle}!" sitetitle=@site.title}}</span>
+              <p class="m-b opacity-070" id="menu-input-label">{{@site.description}}</p>
+              {{> subscribe-form
+                form_type="signup"
+                form_class="radius-rounded"
+                input_class="w-100"
+                input_label="menu-input-label"
+                button_class="btn--white"
+              }}
+            </div>
+          </div>
+          <div class="text-09 m-t-sm m-b-sm text-center text-acc">
+            {{t "Already have an account?"}} <a href="/signin/">{{t "Sign in"}}</a>
+            {{!-- Portal link below --}}
+            {{!-- {{t "Already have an account?"}} <a href="/signin/" data-portal="signin">{{t "Sign in"}}</a> --}}
+          </div>
+        </div>
+      {{/unless}}
+    {{/unless}}
+  {{/if}}
+
+  <button class="menu__theme border-top js-theme-toggle">
+    <span class="menu__theme--system">{{>icon name="brightness-half" size="sm"}}{{t "System Theme"}}</span>
+    <span class="menu__theme--light">{{>icon name="sun" size="sm"}}{{t "Light Theme"}}</span>
+    <span class="menu__theme--dark">{{>icon name="moon" size="sm"}}{{t "Dark Theme"}}</span>
+  </button>
+</div>

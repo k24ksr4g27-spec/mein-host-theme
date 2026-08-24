@@ -1,0 +1,59 @@
+{{!-- Typography --}}
+{{#if @custom.font_family}}
+  {{#match @custom.font_family "!=" "System font"}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  {{/match}}
+
+  {{!-- System font --}}
+  {{#match @custom.font_family "System font"}}
+    {{!-- It's the default settings, browser fonts are used --}}
+    {{!-- -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"; --}}
+  {{/match}}
+
+  <style> 
+    body { 
+      --font-headings: var(--gh-font-heading, var(--font-system));
+      --font-body: var(--gh-font-heading, var(--font-system));
+    }
+  </style>
+
+  {{!-- Urbanist & Inter --}}
+  {{#match @custom.font_family "Urbanist & Inter"}}
+    <link rel="preload stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" 
+          as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin>
+    <style>body { --font-body: var(--gh-font-body, 'Inter'), sans-serif; --font-headings: var(--gh-font-heading, 'Urbanist'), sans-serif; }</style>
+  {{/match}}
+
+  {{!-- DM Sans --}}
+  {{#match @custom.font_family "DM Sans"}}
+    <link rel="preload stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap" 
+          as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin>
+    <style>body { --font-body: var(--gh-font-body, 'DM Sans'), sans-serif; }</style>
+  {{/match}}
+
+  {{!-- Inter --}}
+  {{#match @custom.font_family "Inter"}}
+    <link rel="preload stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" 
+          as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin>    
+    <style>body { --font-body: var(--gh-font-body, 'Inter'), sans-serif; }</style>
+  {{/match}}
+
+  {{!-- Playfair Display & Open Sans --}}
+  {{#match @custom.font_family "Playfair Display & Open Sans"}}
+    <link rel="preload stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" 
+          as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin>
+    <style>
+      body { --font-body: var(--gh-font-body, 'Open Sans'), sans-serif; --font-headings: var(--gh-font-heading, 'Playfair Display'), serif; }
+
+      body h1, body h2, body h3 { font-weight: var(--font-weight-extra-bold); }
+    </style>
+  {{/match}}
+
+  {{!-- Roboto Mono --}}
+  {{#match @custom.font_family "Roboto Mono"}}
+    <link rel="preload stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" 
+          as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin>
+    <style> body { --font-body: var(--gh-font-body, 'Roboto Mono'), monospace; --font-headings: var(--gh-font-heading, 'Roboto Mono'), monospace; } </style>
+  {{/match}}
+{{/if}}

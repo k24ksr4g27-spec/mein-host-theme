@@ -1,0 +1,99 @@
+<div class="card author-card author-{{slug}}{{#if class}} {{class}}{{/if}}{{#if profile_image}} has-image{{/if}}">
+
+  {{!-- Author profile image --}}
+  {{#if profile_image}}
+    {{#link href=(url) class="author-card__media flex flex-cc is-round"}}
+      <img class="lazyload author-card__img is-round z-index-1" 
+        data-srcset="{{img_url profile_image size="xs"}} 100w,
+            {{img_url profile_image size="s"}} 300w"
+        srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+        data-sizes="auto"
+        data-src="{{img_url profile_image size="xs"}}"
+        src="{{img_url profile_image size="xxs"}}"
+        alt="{{name}}"
+      />
+    {{/link}}
+  {{/if}}
+
+  {{!-- Author hero content --}}
+  <div class="author-card__content flex-1 flex flex-col text-acc">
+    {{!-- Name & social --}}
+    <div class="author-card__profile flex flex-wrap items-center m-b-sm">
+      <h3 class="author-card__name fw-700 m-b-0">
+        {{#link href=(url)}}{{name}}{{/link}}
+      </h3>
+      
+      {{!-- Author social links --}}
+      <div class="author-card__social flex{{#if twitter}} has-twitter{{/if}}{{#if facebook}} has-facebook{{/if}}{{#if website}} has-website{{/if}}">
+        {{!-- Twitter --}}
+        {{#if twitter}}
+          <a href="{{social_url type="twitter"}}" target="_blank" title="Twitter" aria-label="Twitter">
+            {{> icon name="twitter-x" size="sm"}}
+          </a>
+        {{/if}}
+        {{!-- Facebook --}}
+        {{#if facebook}}
+          <a href="{{social_url type="facebook"}}" target="_blank" title="Facebook" aria-label="Facebook">
+            {{> icon name="facebook" size="sm"}}
+          </a>
+        {{/if}}
+        {{#if linkedin}}
+          <a href="{{social_url type="linkedin"}}" target="_blank" title="LinkedIn" aria-label="LinkedIn">
+            {{> icon name="linkedin" size="sm"}}
+          </a>
+        {{/if}}
+        {{#if bluesky}}
+          <a href="{{social_url type="bluesky"}}" target="_blank" title="Bluesky" aria-label="Bluesky">
+            {{> icon-p name="bluesky" size="sm"}}
+          </a>
+        {{/if}}
+        {{#if threads}}
+          <a href="{{social_url type="threads"}}" target="_blank" title="Threads" aria-label="Threads">
+            {{> icon-p name="threads" size="sm"}}
+          </a>
+        {{/if}}
+        {{#if mastodon}}
+          <a href="{{social_url type="mastodon"}}" target="_blank" title="Mastodon" aria-label="Mastodon">
+            {{> icon-p name="mastodon" size="sm"}}
+          </a>
+        {{/if}}
+        {{#if tiktok}}
+          <a href="{{social_url type="tiktok"}}" target="_blank" title="TikTok" aria-label="TikTok">
+            {{> icon-p name="tiktok" size="sm"}}
+          </a>
+        {{/if}}
+        {{#if youtube}}
+          <a href="{{social_url type="youtube"}}" target="_blank" title="YouTube" aria-label="YouTube">
+            {{> icon-p name="youtube" size="sm"}}
+          </a>
+        {{/if}}
+        {{#if instagram}}
+          <a href="{{social_url type="instagram"}}" target="_blank" title="Instagram" aria-label="Instagram">
+            {{> icon name="instagram" size="sm"}}
+          </a>
+        {{/if}}
+        {{!-- Author website --}}
+        {{#if website}}
+          <a href="{{website}}" class=""
+            title="Website" aria-label="Website"
+            target="_blank" rel="noopener noreferrer">
+            {{> icon name="link" size="sm"}}
+          </a>
+        {{/if}}
+      </div>
+    </div>
+    
+    {{#if bio}}<div class="author-card__bio flex-1 text-09 text-acc m-b">{{bio}}</div>{{/if}}
+    
+    <div class="author-card__details flex text-acc">
+      {{!-- Post count --}}
+      {{#if count.posts}}
+        <span class="author-card__count flex fw-500 text-09">{{plural count.posts empty=(t 'No posts') singular=(t '1 post') plural=(t '% posts')}}</span>
+      {{/if}}
+
+      {{#link href=(url) class="author-card__cta fw-500 text-09"}}
+        {{#if count.posts}}{{t "View all"}}{{else}}{{t "View all posts"}} {{/if}}
+      {{/link}}
+    </div>
+  </div>
+</div>

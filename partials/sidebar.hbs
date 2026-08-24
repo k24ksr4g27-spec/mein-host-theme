@@ -1,0 +1,97 @@
+<aside class="sidebar">
+  {{!-- Sidebar featured posts --}}
+  {{#get "posts" filter="featured:true+id:-{{comment_id}}" limit="5" include="authors,tags" as |featured|}}
+    {{#if posts}}
+    <div class="sidebar__section border">
+      <div class="sidebar__title">{{t "Featured posts"}}</div>
+      {{#foreach featured}}
+        {{#link href=(url) class="sidebar-story"}}
+          {{#if feature_image}}
+            <figure class="sidebar-story__media m-r">
+              <img 
+                class="lazyload" 
+                data-sizes="auto"
+                data-src="{{img_url feature_image size="xs"}}"
+                src="{{img_url feature_image size="xxs"}}"
+                alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+              />
+            </figure>
+          {{/if}}
+          <div class="sidebar-story__content">
+            <h3 class="sidebar-story__title">{{title}}</h3>
+
+            <div class="sidebar-story__info">
+              <time datetime="{{date format='YYYY-MM-DD'}}" class="sidebar-story__date">
+                {{date published_at format="DD MMM YYYY"}}
+              </time>
+            </div>
+          </div>
+        {{/link}}
+      {{/foreach}}
+    </div>
+    {{/if}}
+  {{/get}}
+
+  {{!-- Sidebar latest posts --}}
+  {{#get "posts" filter="featured:false+id:-{{comment_id}}" limit="3" include="authors,tags" as |latest|}}
+    <div class="sidebar__section border">   
+      <div class="sidebar__title">{{t "Latest posts"}}</div>   
+      {{#foreach latest}}
+        {{#link href=(url) class="sidebar-story"}}
+          {{#if feature_image}}
+            <figure class="sidebar-story__media m-r">
+              <img 
+                class="lazyload" 
+                data-sizes="auto"
+                data-src="{{img_url feature_image size="xs"}}"
+                src="{{img_url feature_image size="xxs"}}"
+                alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+              />
+            </figure>
+          {{/if}}
+          <div class="sidebar-story__content">
+            <h3 class="sidebar-story__title">{{title}}</h3>
+
+            <div class="sidebar-story__info">
+              <time datetime="{{date format='YYYY-MM-DD'}}" class="sidebar-story__date">
+                {{date published_at format="DD MMM YYYY"}}
+              </time>
+            </div>
+          </div>
+        {{/link}}
+      {{/foreach}}
+    </div>
+  {{/get}}
+
+  {{!-- Subscribe--}}
+  {{#if @site.members_enabled}}
+    {{#unless @site.members_invite_only}}
+      {{#if @member.paid}}
+      {{else if @member}}
+        <div class="sidebar__section">
+          <div class="sidebar__subscribe is-sticky flex flex-col bg-acc">
+            <h4 class="text-center text-12 text-acc">{{t "Premium Membership"}}</h4>
+            <div class="m-b text-acc">{{t "Unlock full access to see the entire library by subscribing to a paid plan."}}</div> 
+            {{#link href="/membership" class="btn btn--primary btn--xs self-align-center"}}{{t "Upgrade"}}{{/link}}
+          </div>
+        </div>
+      {{else}}
+        <div class="sidebar__section is-sticky flex flex-cc">
+          {{#if @site.icon}}
+            <img class="lazyload sidebar__icon"
+              data-src="{{img_url @site.icon size="xs"}}"
+              src="{{img_url @site.icon size="xxs"}}"
+              alt="{{@site.title}}"/>
+          {{/if}}
+          <div class="sidebar__subscribe bg-default">
+            <h4 class="text-center text-acc fw-800{{#if @site.icon}} m-t-sm{{/if}}">{{@site.title}} {{t "Newsletter"}}</h4>
+            <div class="m-b text-acc" id="sidebar-input-label">{{t "Get the latest insights directly to your inbox!"}}</div>
+            {{> subscribe-form 
+              input_label="sidebar-input-label"
+            }}
+          </div>
+        </div>
+      {{/if}}
+    {{/unless}}
+  {{/if}}
+</aside>

@@ -1,0 +1,131 @@
+.notify {    
+  display: flex;
+  align-items: center;
+  position: fixed;
+  z-index: 100;
+  top: var(--gap);
+  right: var(--gap);   
+  padding: var(--gap); 
+  width: 100%;
+  max-width: calc(100% - 2em);
+  background-color: var(--color-dark-acc);
+  color: var(--color-white);
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-semi-bold);
+  border-radius: var(--global-radius);
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all var(--trans-default);
+
+  @media (--mq-sm) {
+    max-width: 25rem;
+  }
+
+  @mixin attention {
+    outline: none;
+  }
+
+  &.is-closed {
+    transform: translateX(0) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: all var(--trans-default);
+  }
+
+  &__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin-right: var(--gap);
+
+    &.icon-success {
+      color: var(--color-success);
+    }
+
+    &.icon-warning {
+      color: var(--color-warning);
+    }
+
+    &.icon-error {
+      color: var(--color-error);
+    }
+  }
+
+  &__msg {
+    display: flex;
+    flex: 1;
+    margin-right: var(--gap);
+
+    & > .icon {
+      margin-right: var(--gap);
+    }
+  }
+
+  &__close {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 2px dotted var(--color-grey);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+
+    &:before,
+    &:after {
+      position: absolute;
+      content: '';
+      height: 2px;
+      width: 50%;
+      border-top: 2px solid;
+      color: var(--color-light);
+      transition: transform var(--trans-default);
+    }
+
+    &:before {
+      transform: rotate(45deg);
+    }
+
+    &:after {
+      transform: rotate(-45deg);
+    }
+
+    @mixin attention {
+      background-color: hsla(var(--color-bg-base) / 10%);
+
+      &:before {
+        transform: rotate(135deg);
+      }
+
+      &:after {
+        transform: rotate(45deg);
+      }
+    }
+  }
+}
+
+form[data-members-form].success .notify-success,
+form[data-members-form].error .notify-error {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.signin-success .notify-signin,
+.signup-success .notify-signup,
+.subscribe-success .notify-subscribe,
+.link-expired .notify-expired,
+.checkout-success .notify-checkout,
+.billing-success .notify-billing-success,
+.billing-cancel .notify-billing-cancel {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.notify {
+  display: var(--global-theme-notifications);
+}

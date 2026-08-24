@@ -1,0 +1,55 @@
+{{!-- Content preview --}}
+<div class="content post-sneak-peek">
+  {{{html}}}
+</div>
+
+{{!-- Post Access CTA --}}
+<div class="content-cta border {{visibility}}{{#if @site.logo}} has-logo{{/if}}">
+  <div class="content-cta__content{{#unless @site.logo}} text-center{{/unless}}">
+    <h2 class="content-cta__title">{{t "Read the full story"}}</h2>
+    {{#has visibility="members"}}
+      <p class="content-cta__description">
+        {{#if @member}}{{t "Upgrade"}}{{else}}{{t "Sign up"}}{{/if}} 
+        {{t "now to read the full story and get access to all posts for"}} 
+        {{t "subscribers only"}}.
+      </p>  
+    {{/has}}
+    {{#has visibility="paid"}}
+      <p class="content-cta__description">
+        {{#if @member}}{{t "Upgrade"}}{{else}}{{t "Sign up"}}{{/if}} 
+        {{t "now to read the full story and get access to all posts for"}} 
+        {{t "paying subscribers only"}}.
+      </p>
+    {{/has}}
+    {{#has visibility="tiers"}}
+      <p class="content-cta__description">
+        {{#if @member}}{{t "Upgrade"}}{{else}}{{t "Sign up"}}{{/if}} 
+        {{t "now to read the full story and get access to all posts for"}} 
+        {{tiers}} {{t "only"}}.
+      </p>
+    {{/has}}
+
+    {{#if @member}}
+      {{!-- For Portal add:  data-portal="account/plans" --}}
+      {{#link href="/membership/" class="btn btn--primary btn--rounded m-b"}}
+        {{t "Upgrade"}}
+      {{/link}}
+    {{else}}
+      {{!-- For Portal add:  data-portal="signup" --}}
+      {{#link href="/membership/" class="btn btn--primary btn--rounded m-b"}}
+        {{t "Subscribe"}}
+      {{/link}}
+      <div class="small">
+        <span>{{t "Already have an account?"}}</span> 
+        {{#link href="/signin/" class="content-cta-alt link-no-style"}}{{t "Sign in"}}{{/link}}
+        {{!-- Portal link below --}}
+        {{!-- {{#link href="/signin/" data-portal="signin" class="content-cta-alt link-no-style"}}{{t "Sign in"}}{{/link}} --}}
+      </div>
+    {{/if}}
+  </div>
+  <div class="content-cta__media">
+    {{#if @site.icon}}
+      <img src="{{img_url @site.icon size="s"}}" alt="{{@site.title}}"/>
+    {{/if}}
+  </div>
+</div>

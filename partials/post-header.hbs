@@ -1,0 +1,13 @@
+{{#if access}}
+  {{#is "post"}}
+    {{!-- Post tags & post sharing --}}
+    <div class="post-header content-width  m-b-lg{{#if tags}} has-tags p-t p-b border-top border-bottom{{/if}}">
+      {{#if tags}}<span class="post-header__tags">{{t "In"}}: {{tags}}</span>{{/if}}
+
+      <span class="flex-1"></span>
+
+      {{!-- Social sharing --}}
+      {{> social-share}}
+    </div>
+  {{/is}}
+{{/if}}

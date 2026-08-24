@@ -1,0 +1,9 @@
+<nav class="pagination" role="navigation">
+  <a class="prev-posts{{#unless prev}} disabled{{/unless}}" {{#if prev}}href="{{page_url prev}}"{{/if}}>
+    {{> icon name="arrow-left" size="sm"}}<span class="m-l-xs">{{t "Prev"}}</span>
+  </a>
+  <span class="page-number">{{t "Page {current_page} of {total_pages}" current_page=page total_pages=pages}}</span>
+  <a class="next-posts{{#unless next}} disabled{{/unless}}" {{#if next}}href="{{page_url next}}"{{/if}}>
+    <span class="m-r-xs">{{t "Next"}}</span>{{> icon name="arrow-right" size="sm"}}
+  </a>
+</nav>

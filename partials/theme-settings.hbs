@@ -1,0 +1,68 @@
+{{!-- Theme config for js functions --}}
+<script>
+  // Basic Config
+  let themeSettings = {
+    ghostVersion: 'v5.0',
+    searchUrl: `{{@site.url}}`,
+    searchKey: ``,
+    searchInContent: false,
+    defaultColorScheme: `{{#if @custom.color_scheme}}{{@custom.color_scheme}}{{else}}system{{/if}}`,
+    enableImageLightbox: true,
+    openLinksInNewTab: false
+  }
+</script>
+
+{{!-- Global UI parameters --}}
+<style>
+  :root {
+    --global-theme-notifications: none; /* flex/none */
+    --global-hero-title-color: var(--color-primary);
+    --global-button-gradient: var(--color-primary);
+    --global-max-width: 1280px; /* site max width */
+    --global-content-width: 680px; /* post-content-width */
+    --global-wide-width: 960px; /* site max width */
+    --global-radius: 8px; /* default radius */
+    --global-radius-rounded: 30px; /* radius for rounded elements */
+    --global-gallery-gap: 1em; /* Image gallery distance between images */
+    --global-hyphens: none; /* none/auto */
+    --global-header-height: 80px;
+    --global-progress-bar: visible; /* visible/hidden */
+    --global-content-preview-fading: 0%; /* 50%-100% for fading effect */
+  }
+</style>
+
+{{!-- User Theme Handling & Globals --}}
+<script>
+  let preferredTheme = localStorage.getItem('PREFERRED_COLOR_SCHEME') || themeSettings.defaultColorScheme.toLowerCase();
+  document.documentElement.setAttribute('data-color-scheme', preferredTheme);
+  
+  // Global values needed
+  const themeGlobal = {
+    currentPage: parseInt('{{pagination.page}}'),
+    nextPage: parseInt('{{pagination.next}}'),
+    nextPageLink: '',
+    maxPages: parseInt('{{pagination.pages}}'), 
+    lastPage: `{{pagination.page}}` === `{{pagination.pages}}` ? true : false,
+    postsPerPage: parseInt('{{@config.posts_per_page}}'),
+    scrollPos: 0
+  }
+
+  // Calculate contrast for primary color (black/white);
+  function getContrast(hexcolor) {
+    // If a leading # is provided, remove it
+    if (hexcolor.slice(0, 1) === '#') { hexcolor = hexcolor.slice(1); }
+    // If a three-character hexcode, make six-character
+    if (hexcolor.length === 3) { hexcolor = hexcolor.split('').map(function (hex) { return hex + hex;}).join(''); }
+    // Convert to RGB value
+    var r = parseInt(hexcolor.substr(0,2),16); var g = parseInt(hexcolor.substr(2,2),16); var b = parseInt(hexcolor.substr(4,2),16);
+    // Get YIQ ratio
+    var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    // Check contrast
+    return (yiq >= 128) ? '#000' : '#fff';
+  };
+
+  let style = document.createElement('style');
+  style.innerHTML = `:root { --color-primary-contrast: ${getContrast("{{@site.accent_color}}")} }`
+  document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
