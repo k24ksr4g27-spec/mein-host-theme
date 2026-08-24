@@ -1,0 +1,46 @@
+{{!< ../default}}
+
+{{!-- Page hero --}}
+{{#page}}
+  {{> post-hero 
+    image_style="hidden"
+  }}
+{{else}}
+  <div class="hero__content flex flex-cc m-t-lg">
+    <h1 class="hero__title text-center m-b">{{t "Your account"}}</h1>
+  </div>
+{{/page}}
+
+<div class="container wrapper">
+  {{#if @member.paid}}
+    {{!-- Logged in, paying member: Show account info --}}
+    <div class="member content-width border text-acc m-b-lg">
+      {{#foreach @member.subscriptions}}
+        {{!-- Show the member info --}}
+        {{#if @first}}
+          {{> member-profile}}
+        {{/if}}
+        
+        {{!-- Show the member subscription  --}}
+        {{> member-subscription}}
+      {{/foreach}}
+    </div>
+
+  {{else if @member}}
+
+    {{!-- Member profile --}}
+    <div class="member content-width border text-acc m-b-lg">
+      {{!-- Show the member info --}}
+      {{> member-profile}}
+
+      {{!-- Show the member subscription  --}}
+      {{> member-subscription}}
+    </div>
+
+  {{else}}
+
+    {{!-- Not logged in: Redirect to signin --}}
+    <script>window.location = '{{@site.url}}/signin/';</script>
+
+  {{/if}}
+</div>

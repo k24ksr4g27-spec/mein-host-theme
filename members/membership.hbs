@@ -1,0 +1,147 @@
+{{!< ../default}}
+
+{{!-- page header --}}
+{{#page}} 
+  {{> post-hero 
+    image_style="hidden"
+  }}
+{{else}}
+  <div class="hero__content flex flex-col flex-cc m-t-lg m-b-lg">
+    <h1 class="hero__title text-center">{{t "Membership"}}</h1>
+  </div>
+{{/page}}
+
+<div class="container wrapper">
+  {{!-- Membership data --}}
+  <div class="membership grid pricing m-b-lg js-membership" data-plan-count="{{#if @member}}2{{else}}3{{/if}}">
+    {{#if @member.paid}}
+      {{!-- Not logged in: Redirect to signin --}}
+      <script>window.location = '{{@site.url}}/account/';</script>
+      {{!-- Portal link --}}
+      {{!-- <script>window.location = '{{@site.url}}/#/portal/account/';</script> --}}
+    {{else}}
+      {{#get "tiers" include="monthly_price,yearly_price,benefits" limit="15" as |tiers|}}
+        {{#foreach tiers}}
+          {{!-- Free tier --}}
+          {{#unless @member}}
+            {{#match type "free"}}
+              <div class="card membership-plan tier-{{slug}}" data-tier="1" style="--color-accent: var(--color-tier-1,var(--color-primary))">
+                <div class="membership-plan__symbol">
+                  {{> icon name="plan-free" size="lg"}}
+                </div>
+
+                {{!-- Title & Price --}}
+                <header class="membership-plan__hdr flex flex-col text-acc m-b-lg">
+                  <h3 class="membership-plan__title">{{name}}</h3>
+                  <div class="membership-plan__description m-t-sm text-11 text-acc">{{description}}</div>
+                  {{!-- <div class="membership-plan__price m-t">
+                    <strong>{{price 0}}</strong>
+                    <sup>/{{t "forever"}}</sup>
+                  </div> --}}
+                </header>
+                
+                {{!-- Benefits --}}
+                <div class="membership-plan__content text-acc m-b">
+                  <ul class="list--unstyled m-b-0">
+                    {{#foreach benefits as |benefit|}}
+                      <li>{{benefit}}</li>
+                    {{/foreach}}
+                  </ul>
+                </div>
+
+                {{!-- Free signup --}}
+                {{#link href="/signup/" class="btn uppercase btn--rounded btn--accent"}}{{t "Subscribe now"}}{{/link}}
+                {{!-- Portal link belows --}}
+                {{!-- {{#link href="/signup/" class="btn uppercase btn--rounded btn--accent"}}{{t "Subscribe now"}}{{/link}} --}}
+              </div>
+            {{/match}}
+          {{/unless}}
+
+          {{!-- Paid tier --}}
+          {{#match type "paid"}}
+
+            {{!-- Monthly price --}}
+            {{#if monthly_price}}
+              <div class="card membership-plan tier-{{slug}} plan-monthly" data-tier="2" style="--color-accent: var(--color-tier-2,var(--color-primary))">
+                <div class="membership-plan__symbol">
+                  {{> icon name="plan-monthly" size="lg"}}
+                </div>
+
+                {{!-- Title & Price --}}
+                <header class="membership-plan__hdr flex flex-col text-acc m-b-lg">
+                  <h3 class="membership-plan__title">{{name}} {{t "Monthly"}}</h3>
+                  <div class="membership-plan__description m-t-sm text-11 text-acc">{{description}}</div>
+                  <div class="membership-plan__price m-t">
+                    <a data-plan="monthly" data-portal="signup/{{id}}/monthly">
+                      <strong>{{price monthly_price currency=currency}}</strong><sup>/{{t "month"}}</sup>
+                    </a>
+                  </div>
+                </header>
+                
+                {{!-- Benefits --}}
+                <div class="membership-plan__content text-acc m-b">
+                  <ul class="list--unstyled m-b-0">
+                    {{#foreach benefits as |benefit|}}
+                      <li>{{benefit}}</li>
+                    {{/foreach}}
+                  </ul>
+                </div>
+                
+                {{!-- Price --}}
+                <a href="javascript:" data-plan="monthly"  data-portal="signup/{{id}}/monthly" 
+                  class="btn uppercase btn--rounded btn--accent">
+                  {{t "Subscribe now"}}
+                </a>
+              </div>
+            {{/if}}
+
+            {{!-- Yearly price --}}
+            {{#if yearly_price}}
+              <div class="card membership-plan tier-{{slug}} plan-yearly" data-tier="3" style="--color-accent: var(--color-tier-3,var(--color-primary))">
+                <div class="membership-plan__symbol">
+                  {{> icon name="plan-yearly" size="lg"}}
+                </div>
+
+                {{!-- Title & Price --}}
+                <header class="membership-plan__hdr flex flex-col text-acc m-b-lg">
+                  <h3 class="membership-plan__title">{{name}} {{t "Yearly"}}</h3>
+                  <div class="membership-plan__description m-t-sm text-11 text-acc">{{description}}</div>
+                  <div class="membership-plan__price m-t">
+                    <a data-plan="annual" data-portal="signup/{{id}}/yearly">
+                      <strong>{{price yearly_price currency=currency}}</strong><sup>/{{t "year"}}</sup>
+                    </a>
+                  </div>
+                </header>
+                
+                {{!-- Benefits --}}
+                <div class="membership-plan__content text-acc m-b">
+                  <ul class="list--unstyled m-b-0">
+                    {{#foreach benefits as |benefit|}}
+                      <li>{{benefit}}</li>
+                    {{/foreach}}
+                  </ul>
+                </div>
+                
+                {{!-- Price --}}
+                <a href="javascript:" data-plan="annual" data-portal="signup/{{id}}/yearly"
+                    class="btn uppercase btn--rounded btn--accent">
+                  {{t "Subscribe now"}}
+                </a>
+              </div>
+            {{/if}}
+          {{/match}}
+
+        {{/foreach}}
+      {{/get}}
+    {{/if}}
+  </div>
+
+  {{!-- To add some additional content create the /membership/ page --}}
+  {{#page}}
+    {{#if access}}
+      <article class="{{post_class}} content post-access-{{visibility}}">
+        {{content}}
+      </article>
+    {{/if}}
+  {{/page}}
+</div>
