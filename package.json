@@ -1,0 +1,226 @@
+{
+  "name": "fumio",
+  "description": "Fumio Ghost Theme",
+  "demo": "https://fumio.brightthemes.com",
+  "version": "1.11.0",
+  "author": {
+    "name": "Bright Themes",
+    "email": "brightthemes@gmail.com",
+    "url": "https://brightthemes.com"
+  },
+  "gpm": {
+    "type": "theme",
+    "categories": [
+      "Project",
+      "Portfolio",
+      "Blog"
+    ]
+  },
+  "keywords": [
+    "ghost",
+    "theme",
+    "ghost-theme"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brightthemes/fumio.git"
+  },
+  "scripts": {
+    "dev": "gulp",
+    "prebuild": "test -f theme.js && node theme.js || true",
+    "build": "gulp build",
+    "test": "gscan . --verbose",
+    "zip": "gscan . --verbose && gulp build && mkdir -p dist && zip -rq dist/${npm_package_name} . -x 'dist*' -x 'demo*' -x 'node_modules*' -x '.*' 'TODO.md' 'private.hbs' 'theme.js' && size_kb=$(node -p \"Math.ceil(require('fs').statSync('dist/' + process.env.npm_package_name + '.zip').size / 1024)\") && printf '\\n\\033[1m\\033[32m✓\\033[39m Created dist/%s.zip (%s kB)\\033[0m\\n' \"${npm_package_name}\" \"$size_kb\"",
+    "release": "npm version minor --no-git-tag-version && npm run zip && git add . && git commit -m \"v$(node -p 'require(\"./package.json\").version')\" && git push"
+  },
+  "dependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.2",
+    "@tryghost/content-api": "^1.12.6",
+    "beeper": "^2.1.0",
+    "browser-sync": "^2.29.3",
+    "cssnano": "^5.1.15",
+    "cssnano-preset-advanced": "^5.3.10",
+    "fitvids": "^2.1.1",
+    "fslightbox": "^3.7.5",
+    "fuse.js": "^6.6.2",
+    "gscan": "^5.4.1",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-postcss": "^9.0.1",
+    "gulp-rename": "^2.1.0",
+    "gulp-uglify": "^3.0.2",
+    "gulp-zip": "^5.1.0",
+    "headroom.js": "^0.12.0",
+    "lazysizes": "^5.3.2",
+    "postcss": "^8.5.8",
+    "postcss-cssential": "^1.1.0",
+    "postcss-import": "^14.1.0",
+    "postcss-mixins": "^9.0.4",
+    "postcss-nested": "^5.0.6",
+    "postcss-preset-env": "^7.8.3",
+    "pump": "^3.0.4",
+    "tiny-slider": "^2.9.4",
+    "tocbot": "^4.36.4"
+  },
+  "config": {
+    "custom": {
+      "color_scheme": {
+        "type": "select",
+        "options": [
+          "System",
+          "Light",
+          "Dark"
+        ],
+        "default": "System"
+      },
+      "font_family": {
+        "type": "select",
+        "options": [
+          "System font",
+          "Urbanist & Inter",
+          "DM Sans",
+          "Inter",
+          "Playfair Display & Open Sans",
+          "Roboto Mono"
+        ],
+        "default": "System font",
+        "description": "Set the font family (when the Ghost custom fonts are set to theme default)"
+      },
+      "background_pattern": {
+        "type": "select",
+        "options": [
+          "none",
+          "grain",
+          "topography",
+          "dots",
+          "lines",
+          "graph-paper"
+        ],
+        "default": "none"
+      },
+      "header_position": {
+        "type": "select",
+        "options": [
+          "normal",
+          "sticky",
+          "floating"
+        ],
+        "default": "normal"
+      },
+      "search_type": {
+        "type": "select",
+        "options": [
+          "native",
+          "custom",
+          "none"
+        ],
+        "default": "native"
+      },
+      "hero_headline": {
+        "type": "text",
+        "group": "homepage"
+      },
+      "hero_description": {
+        "type": "text",
+        "group": "homepage"
+      },
+      "hero_image_style": {
+        "type": "select",
+        "options": [
+          "background",
+          "background-full",
+          "side",
+          "bottom",
+          "hidden"
+        ],
+        "default": "hidden",
+        "group": "homepage"
+      },
+      "hero_cta": {
+        "type": "select",
+        "options": [
+          "subscribe-form",
+          "primary-cta",
+          "none"
+        ],
+        "default": "subscribe-form",
+        "group": "homepage"
+      },
+      "project_feed_layout": {
+        "type": "select",
+        "options": [
+          "grid",
+          "asymmetric-grid",
+          "list",
+          "asymmetric-list",
+          "alternating-list"
+        ],
+        "default": "asymmetric-grid",
+        "group": "homepage"
+      },
+      "max_project_count": {
+        "type": "select",
+        "options": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
+        "default": "6",
+        "group": "homepage"
+      },
+      "project_card_color": {
+        "type": "boolean",
+        "default": true,
+        "group": "homepage"
+      },
+      "enable_breadcrumbs": {
+        "type": "boolean",
+        "default": false,
+        "group": "post"
+      },
+      "comment_plugin": {
+        "type": "select",
+        "options": [
+          "Native",
+          "Cove",
+          "Disqus",
+          "None"
+        ],
+        "default": "None",
+        "group": "post"
+      },
+      "comment_plugin_id": {
+        "type": "text",
+        "default": "",
+        "group": "post"
+      }
+    },
+    "card_assets": true,
+    "posts_per_page": 6,
+    "image_sizes": {
+      "xxs": {
+        "width": 30
+      },
+      "xs": {
+        "width": 100
+      },
+      "s": {
+        "width": 300
+      },
+      "m": {
+        "width": 600
+      },
+      "l": {
+        "width": 1000
+      },
+      "xl": {
+        "width": 2000
+      }
+    }
+  }
+}
