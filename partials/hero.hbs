@@ -1,5 +1,7 @@
-<div class="hero is-home flex flex-col{{#if class}} {{class}}{{/if}}" data-cover-image="{{#if @site.cover_image}}true{{else}}false{{/if}}"
+<div class="hero is-home flex flex-col hero--chart-bg{{#if class}} {{class}}{{/if}}" data-cover-image="{{#if @site.cover_image}}true{{else}}false{{/if}}"
   data-image-style="{{#if @custom.hero_image_style}}{{@custom.hero_image_style}}{{else}}{{/if}}">
+
+  {{> "hero-bg"}}
 
   {{!-- Hero Content --}}
   <div class="hero__content flex flex-col">
