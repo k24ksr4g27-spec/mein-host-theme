@@ -376,7 +376,7 @@
   z-index: 2;
 }
 .hero.hero--chart-bg .hero__media {
-  z-index: 1;
+  display: none;
 }
 .hero.hero--chart-bg .hero__title,
 .hero.hero--chart-bg .hero__description,
