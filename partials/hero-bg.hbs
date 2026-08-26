@@ -1,11 +1,11 @@
 <div class="hb-stage" id="hero-bg-stage" aria-hidden="true">
-  <div class="hb-grid"></div>
-  <div class="hb-chart-wrap">
-    <div class="hb-track" id="hero-bg-track"></div>
-  </div>
+<div class="hb-grid"></div>
+<div class="hb-chart-wrap">
+<div class="hb-track" id="hero-bg-track"></div>
+</div>
 </div>
 <style>
-.hb-stage{position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none;background:linear-gradient(180deg,#0b0e13 0%,#0d1117 55%,#0a0c10 100%);font-family:'Courier New',monospace;}
+.hb-stage{position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none;background:#000;font-family:'Courier New',monospace;}
 .hb-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:22px 22px;}
 .hb-chart-wrap{position:absolute;inset:0;overflow:hidden;}
 .hb-track{position:absolute;top:0;left:0;height:100%;will-change:transform;}
@@ -34,279 +34,279 @@
 </style>
 <script>
 (function(){
-  var stage=document.getElementById('hero-bg-stage');
-  var track=document.getElementById('hero-bg-track');
-  if(!stage||!track){ return; }
+var stage=document.getElementById('hero-bg-stage');
+var track=document.getElementById('hero-bg-track');
+if(!stage||!track){ return; }
 
-  var reduced=false;
-  try{ reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+var reduced=false;
+try{ reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
 
-  var H=0,W=0;
-  var CANDLE_W=5;
-  var SLOT=8;
-  var SLOT_MS=300;
-  var FUTURE_MARGIN=380;
-  var VISIBLE=0;
-  var MAX_KEEP=0;
+var H=0,W=0;
+var CANDLE_W=6;
+var SLOT=8;
+var SLOT_MS=300;
+var FUTURE_MARGIN=380;
+var VISIBLE=0;
+var MAX_KEEP=0;
 
-  var finalized=[];
-  var boxes=[];
-  var seqCounter=0;
-  var price=0;
-  var minP=0,maxP=0;
-  var vol=0;
-  var stageState='approach';
-  var direction='toSupport';
-  var band={low:0,high:0};
-  var boxLeftSeq=0, boxRightSeq=0;
-  var currentBox=null;
-  var forming=null;
-  var lastTime=null;
-  var positionOffset=0;
-  var pxPerMs=SLOT/SLOT_MS;
-  var rafId=null;
+var finalized=[];
+var boxes=[];
+var seqCounter=0;
+var price=0;
+var minP=0,maxP=0;
+var vol=0;
+var stageState='approach';
+var direction='toSupport';
+var band={low:0,high:0};
+var boxLeftSeq=0, boxRightSeq=0;
+var currentBox=null;
+var forming=null;
+var lastTime=null;
+var positionOffset=0;
+var pxPerMs=SLOT/SLOT_MS;
+var rafId=null;
 
-  function size(){
-    W=stage.clientWidth||300;
-    H=stage.clientHeight||300;
-    VISIBLE=Math.ceil(W/SLOT)+6;
-    MAX_KEEP=VISIBLE+60;
-    vol=H*0.065;
-  }
+function size(){
+W=stage.clientWidth||300;
+H=stage.clientHeight||300;
+VISIBLE=Math.ceil(W/SLOT)+6;
+MAX_KEEP=VISIBLE+60;
+vol=H*0.065;
+}
 
-  function popBox(el){
-    el.classList.remove('hb-pop');
-    void el.offsetWidth;
-    el.classList.add('hb-pop');
-  }
+function popBox(el){
+el.classList.remove('hb-pop');
+void el.offsetWidth;
+el.classList.add('hb-pop');
+}
 
-  function priceToY(p){
-    var pad=H*0.03;
-    var range=(maxP-minP)||1;
-    var frac=(p-minP)/range;
-    return (H-pad)-frac*(H-pad*2);
-  }
+function priceToY(p){
+var pad=H*0.03;
+var range=(maxP-minP)||1;
+var frac=(p-minP)/range;
+return (H-pad)-frac*(H-pad*2);
+}
 
-  function updateScaleFromValue(v){
-    var changed=false;
-    if(v>maxP){maxP=v;changed=true;}
-    if(v<minP){minP=v;changed=true;}
-    return changed;
-  }
+function updateScaleFromValue(v){
+var changed=false;
+if(v>maxP){maxP=v;changed=true;}
+if(v<minP){minP=v;changed=true;}
+return changed;
+}
 
-  function placeCandle(cd){
-    var yHigh=priceToY(cd.high);
-    var yLow=priceToY(cd.low);
-    var yTop=priceToY(Math.max(cd.o,cd.c));
-    var yBot=priceToY(Math.min(cd.o,cd.c));
-    var bodyH=Math.max(1,yBot-yTop);
-    cd.wickEl.style.top=yHigh.toFixed(1)+'px';
-    cd.wickEl.style.height=(yLow-yHigh).toFixed(1)+'px';
-    cd.bodyEl.style.top=yTop.toFixed(1)+'px';
-    cd.bodyEl.style.height=bodyH.toFixed(1)+'px';
-    var bull=cd.c>=cd.o;
-    var cls=bull?'hb-bull':'hb-bear';
-    cd.wickEl.className='hb-wick '+cls;
-    cd.bodyEl.className='hb-body '+cls;
-  }
+function placeCandle(cd){
+var yHigh=priceToY(cd.high);
+var yLow=priceToY(cd.low);
+var yTop=priceToY(Math.max(cd.o,cd.c));
+var yBot=priceToY(Math.min(cd.o,cd.c));
+var bodyH=Math.max(1,yBot-yTop);
+cd.wickEl.style.top=yHigh.toFixed(1)+'px';
+cd.wickEl.style.height=(yLow-yHigh).toFixed(1)+'px';
+cd.bodyEl.style.top=yTop.toFixed(1)+'px';
+cd.bodyEl.style.height=bodyH.toFixed(1)+'px';
+var bull=cd.c>=cd.o;
+var cls=bull?'hb-bull':'hb-bear';
+cd.wickEl.className='hb-wick '+cls;
+cd.bodyEl.className='hb-body '+cls;
+}
 
-  function placeBox(box){
-    var yTop=priceToY(box.priceHigh);
-    var yBot=priceToY(box.priceLow);
-    box.el.style.top=yTop.toFixed(1)+'px';
-    box.el.style.height=Math.max(2,yBot-yTop).toFixed(1)+'px';
-  }
+function placeBox(box){
+var yTop=priceToY(box.priceHigh);
+var yBot=priceToY(box.priceLow);
+box.el.style.top=yTop.toFixed(1)+'px';
+box.el.style.height=Math.max(2,yBot-yTop).toFixed(1)+'px';
+}
 
-  function fullRescale(){
-    var mn=Infinity,mx=-Infinity;
-    for(var i=0;i<finalized.length;i++){ mn=Math.min(mn,finalized[i].low); mx=Math.max(mx,finalized[i].high); }
-    if(forming){ mn=Math.min(mn,forming.low); mx=Math.max(mx,forming.high); }
-    var visibleFromSeq=seqCounter-VISIBLE-5;
-    for(var i=0;i<boxes.length;i++){
-      var b=boxes[i];
-      if(b.rightSeq>=visibleFromSeq || b===currentBox){
-        mn=Math.min(mn,b.priceLow); mx=Math.max(mx,b.priceHigh);
-      }
-    }
-    if(mn===Infinity) return;
-    minP=mn; maxP=mx;
-    for(var i=0;i<finalized.length;i++) placeCandle(finalized[i]);
-    if(forming) placeCandle(forming);
-    for(var i=0;i<boxes.length;i++) placeBox(boxes[i]);
-  }
+function fullRescale(){
+var mn=Infinity,mx=-Infinity;
+for(var i=0;i<finalized.length;i++){ mn=Math.min(mn,finalized[i].low); mx=Math.max(mx,finalized[i].high); }
+if(forming){ mn=Math.min(mn,forming.low); mx=Math.max(mx,forming.high); }
+var visibleFromSeq=seqCounter-VISIBLE-5;
+for(var i=0;i<boxes.length;i++){
+var b=boxes[i];
+if(b.rightSeq>=visibleFromSeq || b===currentBox){
+mn=Math.min(mn,b.priceLow); mx=Math.max(mx,b.priceHigh);
+}
+}
+if(mn===Infinity) return;
+minP=mn; maxP=mx;
+for(var i=0;i<finalized.length;i++) placeCandle(finalized[i]);
+if(forming) placeCandle(forming);
+for(var i=0;i<boxes.length;i++) placeBox(boxes[i]);
+}
 
-  function spawnBox(leftSeq,rightSeq,priceLow,priceHigh,colorClass){
-    var el=document.createElement('div');
-    el.className='hb-zone '+colorClass;
-    el.style.left=(leftSeq*SLOT)+'px';
-    el.style.width=((rightSeq-leftSeq)*SLOT)+'px';
-    var mid=document.createElement('div');
-    mid.className='hb-midline';
-    el.appendChild(mid);
-    var lblTop=document.createElement('div');
-    lblTop.className='hb-lbl hb-top';
-    var lblBot=document.createElement('div');
-    lblBot.className='hb-lbl hb-bot';
-    var lblMid=document.createElement('div');
-    lblMid.className='hb-lbl hb-mid';
-    lblMid.textContent='61.8%';
-    if(colorClass==='hb-red'){
-      lblTop.textContent='78.6%';
-      lblBot.textContent='50%';
-    } else {
-      lblTop.textContent='50%';
-      lblBot.textContent='78.6%';
-    }
-    el.appendChild(lblTop);
-    el.appendChild(lblMid);
-    el.appendChild(lblBot);
-    track.appendChild(el);
-    var box={el:el,leftSeq:leftSeq,rightSeq:rightSeq,priceLow:priceLow,priceHigh:priceHigh,colorClass:colorClass};
-    boxes.push(box);
-    return box;
-  }
+function spawnBox(leftSeq,rightSeq,priceLow,priceHigh,colorClass){
+var el=document.createElement('div');
+el.className='hb-zone '+colorClass;
+el.style.left=(leftSeq*SLOT)+'px';
+el.style.width=((rightSeq-leftSeq)*SLOT)+'px';
+var mid=document.createElement('div');
+mid.className='hb-midline';
+el.appendChild(mid);
+var lblTop=document.createElement('div');
+lblTop.className='hb-lbl hb-top';
+var lblBot=document.createElement('div');
+lblBot.className='hb-lbl hb-bot';
+var lblMid=document.createElement('div');
+lblMid.className='hb-lbl hb-mid';
+lblMid.textContent='61.8%';
+if(colorClass==='hb-red'){
+lblTop.textContent='78.6%';
+lblBot.textContent='50%';
+} else {
+lblTop.textContent='50%';
+lblBot.textContent='78.6%';
+}
+el.appendChild(lblTop);
+el.appendChild(lblMid);
+el.appendChild(lblBot);
+track.appendChild(el);
+var box={el:el,leftSeq:leftSeq,rightSeq:rightSeq,priceLow:priceLow,priceHigh:priceHigh,colorClass:colorClass};
+boxes.push(box);
+return box;
+}
 
-  function startCycle(dir){
-    direction=dir;
-    var leadCandles=20+Math.floor(Math.random()*10);
-    var zoneWidth=12+Math.floor(Math.random()*8);
-    var moveSize=H*(0.08+Math.random()*0.34);
-    var bandHeight=Math.max(H*0.04, vol*1.2);
-    boxLeftSeq=seqCounter+leadCandles;
-    boxRightSeq=boxLeftSeq+zoneWidth;
-    if(dir==='toSupport'){
-      var center=price-moveSize;
-      band={low:center-bandHeight/2, high:center+bandHeight/2};
-      currentBox=spawnBox(boxLeftSeq,boxRightSeq,band.low,band.high,'hb-green');
-    } else {
-      var center2=price+moveSize;
-      band={low:center2-bandHeight/2, high:center2+bandHeight/2};
-      currentBox=spawnBox(boxLeftSeq,boxRightSeq,band.low,band.high,'hb-red');
-    }
-    stageState='approach';
-    fullRescale();
-  }
+function startCycle(dir){
+direction=dir;
+var leadCandles=20+Math.floor(Math.random()*10);
+var zoneWidth=12+Math.floor(Math.random()*8);
+var moveSize=H*(0.08+Math.random()*0.34);
+var bandHeight=Math.max(H*0.04, vol*1.2);
+boxLeftSeq=seqCounter+leadCandles;
+boxRightSeq=boxLeftSeq+zoneWidth;
+if(dir==='toSupport'){
+var center=price-moveSize;
+band={low:center-bandHeight/2, high:center+bandHeight/2};
+currentBox=spawnBox(boxLeftSeq,boxRightSeq,band.low,band.high,'hb-green');
+} else {
+var center2=price+moveSize;
+band={low:center2-bandHeight/2, high:center2+bandHeight/2};
+currentBox=spawnBox(boxLeftSeq,boxRightSeq,band.low,band.high,'hb-red');
+}
+stageState='approach';
+fullRescale();
+}
 
-  function createCandleDom(seq){
-    var wickEl=document.createElement('div');
-    var bodyEl=document.createElement('div');
-    bodyEl.style.width=CANDLE_W+'px';
-    var el=document.createElement('div');
-    el.className='hb-candle';
-    el.style.width=CANDLE_W+'px';
-    el.style.left=(seq*SLOT+(SLOT-CANDLE_W)/2)+'px';
-    el.appendChild(wickEl); el.appendChild(bodyEl);
-    track.appendChild(el);
-    return {wickEl:wickEl, bodyEl:bodyEl, el:el};
-  }
+function createCandleDom(seq){
+var wickEl=document.createElement('div');
+var bodyEl=document.createElement('div');
+bodyEl.style.width=CANDLE_W+'px';
+var el=document.createElement('div');
+el.className='hb-candle';
+el.style.width=CANDLE_W+'px';
+el.style.left=(seq*SLOT+(SLOT-CANDLE_W)/2)+'px';
+el.appendChild(wickEl); el.appendChild(bodyEl);
+track.appendChild(el);
+return {wickEl:wickEl, bodyEl:bodyEl, el:el};
+}
 
-  function beginForming(){
-    var seq=seqCounter++;
-    var dom=createCandleDom(seq);
-    var o=price;
-    forming={seq:seq,o:o,c:o,high:o,low:o,wickEl:dom.wickEl,bodyEl:dom.bodyEl,el:dom.el};
-    placeCandle(forming);
-  }
+function beginForming(){
+var seq=seqCounter++;
+var dom=createCandleDom(seq);
+var o=price;
+forming={seq:seq,o:o,c:o,high:o,low:o,wickEl:dom.wickEl,bodyEl:dom.bodyEl,el:dom.el};
+placeCandle(forming);
+}
 
-  function finalizeForming(){
-    finalized.push(forming);
-    while(finalized.length>MAX_KEEP){
-      var old=finalized.shift();
-      old.el.remove();
-    }
-    while(boxes.length && boxes[0].rightSeq < seqCounter-MAX_KEEP){
-      var ob=boxes.shift();
-      ob.el.remove();
-    }
-  }
+function finalizeForming(){
+finalized.push(forming);
+while(finalized.length>MAX_KEEP){
+var old=finalized.shift();
+old.el.remove();
+}
+while(boxes.length && boxes[0].rightSeq < seqCounter-MAX_KEEP){
+var ob=boxes.shift();
+ob.el.remove();
+}
+}
 
-  function reset(){
-    track.innerHTML='';
-    finalized=[];
-    boxes=[];
-    seqCounter=0;
-    price=H/2;
-    minP=price-10; maxP=price+10;
-    stageState='approach';
-    direction='toSupport';
-    currentBox=null;
-    positionOffset=0;
-    startCycle('toSupport');
-    beginForming();
-  }
+function reset(){
+track.innerHTML='';
+finalized=[];
+boxes=[];
+seqCounter=0;
+price=H/2;
+minP=price-10; maxP=price+10;
+stageState='approach';
+direction='toSupport';
+currentBox=null;
+positionOffset=0;
+startCycle('toSupport');
+beginForming();
+}
 
-  function frame(now){
-    if(lastTime===null) lastTime=now;
-    var dt=now-lastTime;
-    lastTime=now;
-    if(dt>100) dt=100;
-    var noiseAmpPerMs=(vol*1.0)/SLOT_MS;
+function frame(now){
+if(lastTime===null) lastTime=now;
+var dt=now-lastTime;
+lastTime=now;
+if(dt>100) dt=100;
+var noiseAmpPerMs=(vol*1.0)/SLOT_MS;
 
-    if(stageState==='approach'){
-      var remainingCandles=boxLeftSeq-forming.seq;
-      var remainingMs=Math.max(60, remainingCandles*SLOT_MS);
-      var edgeTarget=(direction==='toSupport')?band.high:band.low;
-      var pull=(edgeTarget-price)/remainingMs*dt;
-      price+=pull+(Math.random()-0.5)*noiseAmpPerMs*dt*2.4;
-      if(forming.seq>=boxLeftSeq){ stageState='inside'; popBox(currentBox.el); }
-    } else if(stageState==='inside'){
-      price+=(Math.random()-0.5)*noiseAmpPerMs*dt*2.6;
-      var padB=(band.high-band.low)*0.14;
-      if(price>band.high-padB) price=band.high-padB-Math.abs(Math.random()*padB*0.3);
-      if(price<band.low+padB) price=band.low+padB+Math.abs(Math.random()*padB*0.3);
-      if(forming.seq>=boxRightSeq) stageState='breakout';
-    } else {
-      var pushDir=(direction==='toSupport')?1:-1;
-      var pull2=pushDir*(vol*1.7)/SLOT_MS*dt;
-      price+=pull2+(Math.random()-0.5)*noiseAmpPerMs*dt*2.2;
-      currentBox.rightSeq=Math.max(currentBox.rightSeq, forming.seq+1);
-      currentBox.el.style.width=((currentBox.rightSeq-currentBox.leftSeq)*SLOT)+'px';
-      var brokeOut=(direction==='toSupport')?(price>band.high):(price<band.low);
-      if(brokeOut){
-        currentBox.el.classList.remove('hb-green','hb-red');
-        currentBox.el.classList.add('hb-gray');
-        popBox(currentBox.el);
-        startCycle(direction==='toSupport' ? 'toResistance' : 'toSupport');
-      }
-    }
+if(stageState==='approach'){
+var remainingCandles=boxLeftSeq-forming.seq;
+var remainingMs=Math.max(60, remainingCandles*SLOT_MS);
+var edgeTarget=(direction==='toSupport')?band.high:band.low;
+var pull=(edgeTarget-price)/remainingMs*dt;
+price+=pull+(Math.random()-0.5)*noiseAmpPerMs*dt*2.4;
+if(forming.seq>=boxLeftSeq){ stageState='inside'; popBox(currentBox.el); }
+} else if(stageState==='inside'){
+price+=(Math.random()-0.5)*noiseAmpPerMs*dt*2.6;
+var padB=(band.high-band.low)*0.14;
+if(price>band.high-padB) price=band.high-padB-Math.abs(Math.random()*padB*0.3);
+if(price<band.low+padB) price=band.low+padB+Math.abs(Math.random()*padB*0.3);
+if(forming.seq>=boxRightSeq) stageState='breakout';
+} else {
+var pushDir=(direction==='toSupport')?1:-1;
+var pull2=pushDir*(vol*1.7)/SLOT_MS*dt;
+price+=pull2+(Math.random()-0.5)*noiseAmpPerMs*dt*2.2;
+currentBox.rightSeq=Math.max(currentBox.rightSeq, forming.seq+1);
+currentBox.el.style.width=((currentBox.rightSeq-currentBox.leftSeq)*SLOT)+'px';
+var brokeOut=(direction==='toSupport')?(price>band.high):(price<band.low);
+if(brokeOut){
+currentBox.el.classList.remove('hb-green','hb-red');
+currentBox.el.classList.add('hb-gray');
+popBox(currentBox.el);
+startCycle(direction==='toSupport' ? 'toResistance' : 'toSupport');
+}
+}
 
-    forming.c=price;
-    forming.high=Math.max(forming.high, price);
-    forming.low=Math.min(forming.low, price);
-    var scaleChanged=updateScaleFromValue(forming.high) || updateScaleFromValue(forming.low);
-    if(scaleChanged) fullRescale(); else placeCandle(forming);
+forming.c=price;
+forming.high=Math.max(forming.high, price);
+forming.low=Math.min(forming.low, price);
+var scaleChanged=updateScaleFromValue(forming.high) || updateScaleFromValue(forming.low);
+if(scaleChanged) fullRescale(); else placeCandle(forming);
 
-    positionOffset+=dt*pxPerMs;
-    while(positionOffset>=SLOT){
-      positionOffset-=SLOT;
-      finalizeForming();
-      beginForming();
-    }
+positionOffset+=dt*pxPerMs;
+while(positionOffset>=SLOT){
+positionOffset-=SLOT;
+finalizeForming();
+beginForming();
+}
 
-    var newestSeq=forming.seq;
-    var tx=(W-FUTURE_MARGIN)-positionOffset-(newestSeq+1)*SLOT;
-    track.style.transform='translateX('+tx.toFixed(1)+'px)';
+var newestSeq=forming.seq;
+var tx=(W-FUTURE_MARGIN)-positionOffset-(newestSeq+1)*SLOT;
+track.style.transform='translateX('+tx.toFixed(1)+'px)';
 
-    if(!reduced){ rafId=requestAnimationFrame(frame); }
-  }
+if(!reduced){ rafId=requestAnimationFrame(frame); }
+}
 
-  function start(){
-    size();
-    reset();
-    lastTime=null;
-    if(rafId){ cancelAnimationFrame(rafId); }
-    rafId=requestAnimationFrame(frame);
-  }
+function start(){
+size();
+reset();
+lastTime=null;
+if(rafId){ cancelAnimationFrame(rafId); }
+rafId=requestAnimationFrame(frame);
+}
 
-  var resizeTimer=null;
-  window.addEventListener('resize', function(){
-    clearTimeout(resizeTimer);
-    resizeTimer=setTimeout(function(){
-      if(rafId){ cancelAnimationFrame(rafId); }
-      start();
-    }, 200);
-  });
+var resizeTimer=null;
+window.addEventListener('resize', function(){
+clearTimeout(resizeTimer);
+resizeTimer=setTimeout(function(){
+if(rafId){ cancelAnimationFrame(rafId); }
+start();
+}, 200);
+});
 
-  start();
+start();
 })();
 </script>
