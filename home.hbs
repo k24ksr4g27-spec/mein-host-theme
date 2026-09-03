@@ -3,6 +3,82 @@
 {{!-- Hero --}}
 {{> hero }}
 
+{{!-- MOnalytics: Performance & Method sections --}}
+<section class="container wrapper section mo-performance">
+  <div class="mo-performance__head">
+    <span class="mo-performance__label">{{t "Verified Track Record"}}</span>
+    <h2 class="section__title">{{t "80% Hit Rate."}}<br>{{t "Not a claim — a fact."}}</h2>
+    <p class="mo-performance__text">{{t "Only analyses where the target zone was clearly reached or clearly missed are counted. Deleted or adjusted analyses don't improve the score."}}</p>
+    <p class="mo-performance__text">{{t "No cherry-picking. No retroactive changes. Every outcome is publicly logged."}}</p>
+  </div>
+
+  <div class="mo-performance__grid">
+    <div class="mo-stat">
+      <span class="mo-stat__num mo-stat__num--accent">80%</span>
+      <span class="mo-stat__label">{{t "Hit Rate"}}</span>
+    </div>
+    <div class="mo-stat">
+      <span class="mo-stat__num mo-stat__num--hit">8</span>
+      <span class="mo-stat__label">{{t "Confirmed Hits"}}</span>
+    </div>
+    <div class="mo-stat">
+      <span class="mo-stat__num mo-stat__num--miss">2</span>
+      <span class="mo-stat__label">{{t "Confirmed Misses"}}</span>
+    </div>
+    <div class="mo-stat">
+      <span class="mo-stat__num">52+</span>
+      <span class="mo-stat__label">{{t "Total Analyses"}}</span>
+    </div>
+  </div>
+
+  <a href="/performance-tracker-card/" class="mo-btn">{{t "See Full Tracker"}} →</a>
+</section>
+
+<section class="container wrapper section mo-method">
+  <span class="mo-performance__label">{{t "The Method"}}</span>
+  <h2 class="section__title">{{t "How We Find the Next Move"}}</h2>
+  <p class="mo-performance__text">{{t "We identify wave structures in price action to forecast high-probability turning points — before they happen."}}</p>
+
+  <div class="mo-steps">
+    <div class="mo-step">
+      <span class="mo-step__num">01</span>
+      <h3 class="mo-step__title">{{t "Map the Wave Structure"}}</h3>
+      <p class="mo-step__desc">{{t "We chart the current Elliott Wave position across multiple timeframes — impulse waves, corrective sequences, and nested sub-waves."}}</p>
+    </div>
+    <div class="mo-step">
+      <span class="mo-step__num">02</span>
+      <h3 class="mo-step__title">{{t "Define Fibonacci Zones"}}</h3>
+      <p class="mo-step__desc">{{t "Retracement and extension levels pinpoint precise entry zones, price targets, and invalidation levels. No guessing."}}</p>
+    </div>
+    <div class="mo-step">
+      <span class="mo-step__num">03</span>
+      <h3 class="mo-step__title">{{t "Publish & Track Publicly"}}</h3>
+      <p class="mo-step__desc">{{t "Every analysis is logged and tracked publicly. Every outcome — hit or miss — counts. No cherry-picking, no retroactive edits."}}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+.mo-performance__label{display:block;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--color-primary);margin-bottom:12px;}
+.mo-performance__text{max-width:560px;color:var(--color-grey-light);font-size:15px;line-height:1.7;margin-top:12px;}
+.mo-performance__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:32px 0;}
+.mo-stat{background:var(--color-dark-acc);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:24px 16px;text-align:center;}
+.mo-stat__num{display:block;font-size:36px;font-weight:800;color:var(--color-white);line-height:1;}
+.mo-stat__num--accent{color:var(--color-primary);}
+.mo-stat__num--hit{color:var(--color-success);}
+.mo-stat__num--miss{color:var(--color-error);}
+.mo-stat__label{display:block;margin-top:8px;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;color:var(--color-grey-light);}
+.mo-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:6px;background:var(--color-primary);color:var(--color-black);font-weight:700;font-size:14px;text-decoration:none;transition:opacity .2s, transform .2s;}
+.mo-btn:hover{opacity:.9;transform:translateY(-1px);}
+.mo-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:32px;}
+.mo-step__num{display:block;font-size:44px;font-weight:900;color:rgba(255,255,255,0.14);line-height:1;font-family:monospace;}
+.mo-step__title{margin:16px 0 10px;font-size:18px;font-weight:600;color:var(--color-white);}
+.mo-step__desc{font-size:14px;line-height:1.7;color:var(--color-grey-light);}
+@media (max-width:900px){
+  .mo-performance__grid{grid-template-columns:repeat(2,1fr);}
+  .mo-steps{grid-template-columns:1fr;gap:28px;}
+}
+</style>
 
 {{!-- Projects section --}}
 {{#get "posts" filter="tag:hash-project" include="tags" limit=@custom.max_project_count as |projects|}}
